@@ -2,7 +2,10 @@ import { useState, useEffect } from "react"
 import { Note } from "./components/Note"
 import { Notification } from "./components/Notification"
 import { Footer } from "./components/Footer"
+import { NoteForm } from "./components/NoteForm"
+import { LoginForm } from "./components/LoginForm"
 import noteService from './services/notes'
+import loginService from "./services/login"
 import './index.css'
 
 function App() {
@@ -10,6 +13,9 @@ function App() {
   const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [user, setUser] = useState(null)
 
   const notesToShow = showAll
     ? notes
@@ -56,10 +62,45 @@ function App() {
 
   const handleNoteChange = (e) => setNewNote(e.target.value)
 
+  const handleLogin = async e => {
+    e.preventDefault()
+
+    try {
+      const user = await loginService.login({ username, password })
+      setUser(user)
+      setUsername('')
+      setPassword('')
+    } catch (exception) {
+      setErrorMessage('Wrong credentials')
+      setTimeout(() => setErrorMessage(null), 5000)
+    }
+  }
+
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
+
+      {user === null && <LoginForm
+        username={username}
+        setUsername={setUsername}
+        password={password}
+        setPassword={setPassword}
+        handleLogin={handleLogin}
+      />}
+
+      {
+        user !== null &&
+        <div>
+          <p>{user.name} logged-in</p>
+          <NoteForm
+            addNote={addNote}
+            handleNoteChange={handleNoteChange}
+            newNote={newNote}
+          />
+        </div>
+      }
+
       <div>
         <button onClick={() => setShowAll(!showAll)}>
           show {showAll ? 'important' : 'all'}
@@ -74,13 +115,8 @@ function App() {
           />
         )}
       </ul>
-      <form onSubmit={addNote}>
-        <input
-          value={newNote}
-          onChange={handleNoteChange} type="text"
-        />
-        <button>Save</button>
-      </form>
+
+
       <Footer />
     </div>
   )

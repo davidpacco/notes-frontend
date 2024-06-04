@@ -27,6 +27,15 @@ function App() {
       .then(initialNotes => setNotes(initialNotes))
   }, [])
 
+  useEffect(() => {
+    const userInLocalStorage = window.localStorage.getItem('loggedNoteappUser')
+    if (userInLocalStorage) {
+      const user = JSON.parse(userInLocalStorage)
+      setUser(user)
+      noteService.setToken(user.token)
+    }
+  }, [])
+
   const addNote = e => {
     e.preventDefault()
 
@@ -55,7 +64,6 @@ function App() {
       .catch(() => {
         setErrorMessage(`The note ${note.content} was already deleted from server`)
         setTimeout(() => setErrorMessage(null), 5000)
-        // alert(`The note ${note.content} was already deleted from server`)
         setNotes(notes.filter(note => note.id !== id))
       })
   }
@@ -67,6 +75,8 @@ function App() {
 
     try {
       const user = await loginService.login({ username, password })
+      window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
+      noteService.setToken(user.token)
       setUser(user)
       setUsername('')
       setPassword('')
@@ -74,6 +84,12 @@ function App() {
       setErrorMessage('Wrong credentials')
       setTimeout(() => setErrorMessage(null), 5000)
     }
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('loggedNoteappUser')
+    noteService.setToken(null)
+    setUser(null)
   }
 
   return (
@@ -92,7 +108,7 @@ function App() {
       {
         user !== null &&
         <div>
-          <p>{user.name} logged-in</p>
+          <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
           <NoteForm
             addNote={addNote}
             handleNoteChange={handleNoteChange}

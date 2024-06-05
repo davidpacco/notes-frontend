@@ -7,16 +7,15 @@ import { LoginForm } from "./components/LoginForm"
 import noteService from './services/notes'
 import loginService from "./services/login"
 import './index.css'
+import { Togglable } from "./components/Togglable"
 
 function App() {
   const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [loginVisible, setLoginVisible] = useState(false)
 
   const notesToShow = showAll
     ? notes
@@ -37,21 +36,7 @@ function App() {
     }
   }, [])
 
-  const addNote = e => {
-    e.preventDefault()
 
-    const noteObject = {
-      content: newNote,
-      important: Math.random() < 0.5,
-    }
-
-    noteService
-      .create(noteObject)
-      .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
-        setNewNote('')
-      })
-  }
 
   const toggleImportanceOf = id => {
     const note = notes.find(note => note.id === id)
@@ -69,6 +54,13 @@ function App() {
       })
   }
 
+  const addNote = noteObject => {
+    noteService
+      .create(noteObject)
+      .then(returnedNote => {
+        setNotes(notes.concat(returnedNote))
+      })
+  }
 
   const handleLogin = async e => {
     e.preventDefault()
@@ -92,48 +84,37 @@ function App() {
     setUser(null)
   }
 
-  const handleNoteChange = (e) => setNewNote(e.target.value)
   const handleUsernameChange = e => setUsername(e.target.value)
   const handlePasswordChange = e => setPassword(e.target.value)
-
-  const hideWhenVisible = { display: loginVisible ? 'none' : '' }
-  const showWhenVisible = { display: loginVisible ? '' : 'none' }
 
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
 
-      <div>
-        <div style={hideWhenVisible}>
-          <button onClick={() => setLoginVisible(true)}>Log in</button>
-        </div>
-
-        <div style={showWhenVisible}>
-          <LoginForm
-            username={username}
-            handleUsernameChange={handleUsernameChange}
-            password={password}
-            handlePasswordChange={handlePasswordChange}
-            handleSubmit={handleLogin}
-          />
-          <button onClick={() => setLoginVisible(false)}>Cancel</button>
-        </div>
-      </div>
-
-      <br />
+      {user === null && <Togglable buttonLabel='Login'>
+        <LoginForm
+          username={username}
+          handleUsernameChange={handleUsernameChange}
+          password={password}
+          handlePasswordChange={handlePasswordChange}
+          handleSubmit={handleLogin}
+        />
+      </Togglable>}
 
       {
         user !== null &&
         <div>
           <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
-          <NoteForm
-            addNote={addNote}
-            handleNoteChange={handleNoteChange}
-            newNote={newNote}
-          />
+          <Togglable buttonLabel='New note'>
+            <NoteForm
+              createNote={addNote}
+            />
+          </Togglable>
         </div>
       }
+
+      <br />
 
       <div>
         <button onClick={() => setShowAll(!showAll)}>

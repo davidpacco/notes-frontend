@@ -1,6 +1,12 @@
-export function LoginForm({ username, setUsername, password, setPassword, handleLogin }) {
+export function LoginForm({
+  username,
+  handleUsernameChange,
+  password,
+  handlePasswordChange,
+  handleSubmit
+}) {
   return (
-    <form onSubmit={handleLogin}>
+    <form onSubmit={handleSubmit}>
       <div>
         <label>
           username
@@ -8,7 +14,7 @@ export function LoginForm({ username, setUsername, password, setPassword, handle
             type="text"
             name="username"
             value={username}
-            onChange={e => setUsername(e.target.value)}
+            onChange={handleUsernameChange}
           />
         </label>
       </div>
@@ -19,7 +25,7 @@ export function LoginForm({ username, setUsername, password, setPassword, handle
             type="password"
             name="password"
             value={password}
-            onChange={e => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
           />
         </label>
       </div>

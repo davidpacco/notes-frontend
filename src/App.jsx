@@ -16,6 +16,7 @@ function App() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [loginVisible, setLoginVisible] = useState(false)
 
   const notesToShow = showAll
     ? notes
@@ -68,7 +69,6 @@ function App() {
       })
   }
 
-  const handleNoteChange = (e) => setNewNote(e.target.value)
 
   const handleLogin = async e => {
     e.preventDefault()
@@ -92,18 +92,36 @@ function App() {
     setUser(null)
   }
 
+  const handleNoteChange = (e) => setNewNote(e.target.value)
+  const handleUsernameChange = e => setUsername(e.target.value)
+  const handlePasswordChange = e => setPassword(e.target.value)
+
+  const hideWhenVisible = { display: loginVisible ? 'none' : '' }
+  const showWhenVisible = { display: loginVisible ? '' : 'none' }
+
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
 
-      {user === null && <LoginForm
-        username={username}
-        setUsername={setUsername}
-        password={password}
-        setPassword={setPassword}
-        handleLogin={handleLogin}
-      />}
+      <div>
+        <div style={hideWhenVisible}>
+          <button onClick={() => setLoginVisible(true)}>Log in</button>
+        </div>
+
+        <div style={showWhenVisible}>
+          <LoginForm
+            username={username}
+            handleUsernameChange={handleUsernameChange}
+            password={password}
+            handlePasswordChange={handlePasswordChange}
+            handleSubmit={handleLogin}
+          />
+          <button onClick={() => setLoginVisible(false)}>Cancel</button>
+        </div>
+      </div>
+
+      <br />
 
       {
         user !== null &&

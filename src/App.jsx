@@ -13,8 +13,6 @@ function App() {
   const [notes, setNotes] = useState([])
   const [showAll, setShowAll] = useState(true)
   const [errorMessage, setErrorMessage] = useState(null)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
 
   const notesToShow = showAll
@@ -35,8 +33,6 @@ function App() {
       noteService.setToken(user.token)
     }
   }, [])
-
-
 
   const toggleImportanceOf = id => {
     const note = notes.find(note => note.id === id)
@@ -62,16 +58,12 @@ function App() {
       })
   }
 
-  const handleLogin = async e => {
-    e.preventDefault()
-
+  const handleLogin = async ({ username, password }) => {
     try {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedNoteappUser', JSON.stringify(user))
       noteService.setToken(user.token)
       setUser(user)
-      setUsername('')
-      setPassword('')
     } catch (exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => setErrorMessage(null), 5000)
@@ -84,22 +76,13 @@ function App() {
     setUser(null)
   }
 
-  const handleUsernameChange = e => setUsername(e.target.value)
-  const handlePasswordChange = e => setPassword(e.target.value)
-
   return (
     <div>
       <h1>Notes</h1>
       <Notification message={errorMessage} />
 
       {user === null && <Togglable buttonLabel='Login'>
-        <LoginForm
-          username={username}
-          handleUsernameChange={handleUsernameChange}
-          password={password}
-          handlePasswordChange={handlePasswordChange}
-          handleSubmit={handleLogin}
-        />
+        <LoginForm handleSubmit={handleLogin} />
       </Togglable>}
 
       {
@@ -107,9 +90,7 @@ function App() {
         <div>
           <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
           <Togglable buttonLabel='New note'>
-            <NoteForm
-              createNote={addNote}
-            />
+            <NoteForm createNote={addNote} />
           </Togglable>
         </div>
       }

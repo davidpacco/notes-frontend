@@ -1,12 +1,25 @@
+import { useState } from "react"
+
 export function LoginForm({
-  username,
-  handleUsernameChange,
-  password,
-  handlePasswordChange,
   handleSubmit
 }) {
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+
+  const handleUsernameChange = e => setUsername(e.target.value)
+  const handlePasswordChange = e => setPassword(e.target.value)
+
+  const handleLogin = async e => {
+    e.preventDefault()
+
+    await handleSubmit({ username, password })
+
+    setUsername('')
+    setPassword('')
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleLogin}>
       <div>
         <label>
           username

@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from "react"
-import { Note } from "./components/Note"
-import { Notification } from "./components/Notification"
-import { Footer } from "./components/Footer"
-import { NoteForm } from "./components/NoteForm"
-import { LoginForm } from "./components/LoginForm"
-import { Togglable } from "./components/Togglable"
+import { useState, useEffect, useRef } from 'react'
+import { Note } from './components/Note'
+import { Notification } from './components/Notification'
+import { Footer } from './components/Footer'
+import { NoteForm } from './components/NoteForm'
+import { LoginForm } from './components/LoginForm'
+import { Togglable } from './components/Togglable'
 import noteService from './services/notes'
-import loginService from "./services/login"
+import loginService from './services/login'
 import './index.css'
 
 function App() {

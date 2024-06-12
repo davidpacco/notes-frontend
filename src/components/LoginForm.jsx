@@ -1,4 +1,5 @@
 import { useState } from "react"
+import PropTypes from 'prop-types'
 
 export function LoginForm({
   handleSubmit
@@ -47,4 +48,8 @@ export function LoginForm({
 
     </form>
   )
+}
+
+LoginForm.propTypes = {
+  handleSubmit: PropTypes.func.isRequired
 }

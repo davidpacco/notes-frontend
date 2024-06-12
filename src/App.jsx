@@ -4,10 +4,10 @@ import { Notification } from "./components/Notification"
 import { Footer } from "./components/Footer"
 import { NoteForm } from "./components/NoteForm"
 import { LoginForm } from "./components/LoginForm"
+import { Togglable } from "./components/Togglable"
 import noteService from './services/notes'
 import loginService from "./services/login"
 import './index.css'
-import { Togglable } from "./components/Togglable"
 
 function App() {
   const [notes, setNotes] = useState([])
@@ -113,7 +113,6 @@ function App() {
           />
         )}
       </ul>
-
 
       <Footer />
     </div>

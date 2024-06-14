@@ -23,7 +23,9 @@ export function NoteForm({ createNote }) {
       <form onSubmit={addNote}>
         <input
           value={newNote}
-          onChange={handleNoteChange} type="text"
+          onChange={handleNoteChange}
+          type="text"
+          placeholder='Write note content here'
         />
         <button>Save</button>
       </form>

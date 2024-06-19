@@ -29,6 +29,7 @@ export function LoginForm({
             name="username"
             value={username}
             onChange={handleUsernameChange}
+            data-testid='username'
           />
         </label>
       </div>
@@ -40,11 +41,12 @@ export function LoginForm({
             name="password"
             value={password}
             onChange={handlePasswordChange}
+            data-testid='password'
           />
         </label>
       </div>
 
-      <button type="submit">login</button>
+      <button type="submit">Login</button>
 
     </form>
   )

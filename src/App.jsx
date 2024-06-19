@@ -83,7 +83,7 @@ function App() {
       <h1>Notes</h1>
       <Notification message={errorMessage} />
 
-      {user === null && <Togglable buttonLabel='Login'>
+      {user === null && <Togglable buttonLabel='Log in'>
         <LoginForm handleSubmit={handleLogin} />
       </Togglable>}
 

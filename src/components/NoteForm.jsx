@@ -8,7 +8,7 @@ export function NoteForm({ createNote }) {
 
     createNote({
       content: newNote,
-      important: Math.random() < 0.5,
+      important: true,
     })
 
     setNewNote('')
@@ -26,6 +26,7 @@ export function NoteForm({ createNote }) {
           onChange={handleNoteChange}
           type="text"
           placeholder='Write note content here'
+          data-testid='note-input'
         />
         <button>Save</button>
       </form>

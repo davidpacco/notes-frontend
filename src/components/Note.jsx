@@ -2,7 +2,7 @@ export function Note({ note, toggleImportance }) {
   const label = note.important ? 'Make not important' : 'Make important'
   return (
     <li className="note">
-      {note.content}
+      <span>{note.content}</span>
       <button onClick={toggleImportance}>{label}</button>
     </li>
   )
